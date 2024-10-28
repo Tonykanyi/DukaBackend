@@ -16,14 +16,14 @@ logger = logging.getLogger(__name__)
 
 # Define blueprint
 bp = Blueprint('mpesa', __name__)
-CORS(bp, resources={r"/api/mpesa/payment": {"origins": "http://localhost:5173", "supports_credentials": True}})
+CORS(bp, resources={r"/api/mpesa/payment": {"origins": "http://localhost:5173"'https://my-duka-frontend-o21mxfz57-tonykanyis-projects.vercel.app/', "supports_credentials": True}})
 
 # M-Pesa credentials (use environment variables for security)
 CONSUMER_KEY = os.getenv('CONSUMER_KEY')
 CONSUMER_SECRET = os.getenv('CONSUMER_SECRET')
 SHORTCODE = os.getenv('SHORTCODE')
 PASSKEY = os.getenv('PASSKEY')
-CALLBACK_URL = "https://mydomain.com/path"  # Change this to your actual callback URL
+CALLBACK_URL = "https://26da-197-248-16-215.ngrok-free.app/api/mpesa/payment"  # Change this to your actual callback URL
 @bp.route('/')
 def index():
     return 'Hello, World welcome to myDuka!'
@@ -82,19 +82,18 @@ def mpesa_payment():
         password = base64.b64encode(f"{SHORTCODE}{PASSKEY}{timestamp}".encode()).decode('utf-8')
 
         payload = {
-            "BusinessShortCode": SHORTCODE,
-            "Password": password,
-            "Timestamp": timestamp,
-            "TransactionType": "CustomerPayBillOnline",
-            "Amount": amount,
-            "PartyA": 254713961197,
-            "PartyB": SHORTCODE,
-            "PhoneNumber": 254713961197,
-            "CallBackURL": CALLBACK_URL,
-            "AccountReference": "CompanyXLTD",
-            "TransactionDesc": "Payment of X"
-        }
-
+    "BusinessShortCode": 174379,
+    "Password": "MTc0Mzc5YmZiMjc5ZjlhYTliZGJjZjE1OGU5N2RkNzFhNDY3Y2QyZTBjODkzMDU5YjEwZjc4ZTZiNzJhZGExZWQyYzkxOTIwMjQxMDIzMTMwNjI2",
+    "Timestamp": "20241023130626",
+    "TransactionType": "CustomerPayBillOnline",
+    "Amount": 1,
+    "PartyA": phone_number,
+    "PartyB": 174379,
+    "PhoneNumber": phone_number,
+    "CallBackURL": "https://26da-197-248-16-215.ngrok-free.app/api/mpesa/payment",
+    "AccountReference": "CompanyXLTD",
+    "TransactionDesc": "Payment of X" 
+  }
         # Log the payload for debugging
         logger.debug(f"Sending payment request with payload: {payload}")
 
@@ -114,7 +113,15 @@ def mpesa_payment():
     except Exception as e:
         logger.exception("Error processing payment")
         return jsonify({"success": False, "message": str(e)}), 500
-
+@bp.route('/api/mpesa/payment', methods=['GET'])
+def get_payments():
+    payments = Payment.query.all()
+    logger.debug("Fetched payments from database.")
+    return jsonify([{
+        'id': p.id,
+        'amount': p.amount,
+        'phone_number': p.phone_number
+    } for p in payments]), 200
 # Product Routes
 @bp.route('/api/products', methods=['GET'])
 def get_products():
@@ -127,6 +134,7 @@ def get_products():
         'price': p.price,
         'category': p.category
     } for p in products]), 200
+print(Product)
 
 @bp.route('/api/products', methods=['POST'])
 def add_product():
@@ -158,4 +166,13 @@ def add_sale():
     logger.info("New sale recorded.")
     return jsonify({'message': 'Sale added!'}), 201
 
-
+@bp.route('/api/sales', methods=['GET'])
+def get_sales():
+    sales = Sale.query.all()
+    logger.debug("Fetched sales from database.")
+    return jsonify([{
+        'id': s.id,
+        'product_id': s.product_id,
+        'time': s.time,
+        'quantity': s.quantity
+    } for s in sales]), 200 

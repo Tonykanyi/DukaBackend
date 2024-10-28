@@ -1,5 +1,5 @@
 from . import db
-
+from datetime import datetime
 class Product(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
@@ -17,7 +17,9 @@ class Sale(db.Model):
 
 class Payment(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    order_id = db.Column(db.String(100), nullable=False)
-    payment_method = db.Column(db.String(50), nullable=False)
-    status = db.Column(db.String(50), nullable=False)
-    date = db.Column(db.String(50), nullable=False)
+    order_id = db.Column(db.String(100), default='0', nullable=False)
+    payment_method = db.Column(db.String(50), default='cash', nullable=False)
+    status = db.Column(db.String(50), default='pending', nullable=False)
+    date = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
+    amount = db.Column(db.Float, nullable=False)
+    phone_number = db.Column(db.String(50), nullable=False)
