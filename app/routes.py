@@ -16,14 +16,14 @@ logger = logging.getLogger(__name__)
 
 # Define blueprint
 bp = Blueprint('mpesa', __name__)
-CORS(bp, resources={r"/api/mpesa/payment": {"origins": "http://localhost:5173"'https://my-duka-frontend-o21mxfz57-tonykanyis-projects.vercel.app/', "supports_credentials": True}})
+CORS(bp, resources={r"/api/mpesa/payment ": {"origins": "http://localhost:5173"'https://my-duka-frontend-o21mxfz57-tonykanyis-projects.vercel.app/', "supports_credentials": True}})
 
 # M-Pesa credentials (use environment variables for security)
 CONSUMER_KEY = os.getenv('CONSUMER_KEY')
 CONSUMER_SECRET = os.getenv('CONSUMER_SECRET')
 SHORTCODE = os.getenv('SHORTCODE')
 PASSKEY = os.getenv('PASSKEY')
-CALLBACK_URL = "https://26da-197-248-16-215.ngrok-free.app/api/mpesa/payment"  # Change this to your actual callback URL
+CALLBACK_URL = "https://dukabackend.onrender.com/api/mpesa/payment"  # Change this to your actual callback URL
 @bp.route('/')
 def index():
     return 'Hello, World welcome to myDuka!'
