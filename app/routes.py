@@ -90,7 +90,7 @@ def mpesa_payment():
     "PartyA": phone_number,
     "PartyB": 174379,
     "PhoneNumber": phone_number,
-    "CallBackURL": "https://26da-197-248-16-215.ngrok-free.app/api/mpesa/payment",
+    "CallBackURL": "https://dukabackend.onrender.com/api/mpesa/payment",
     "AccountReference": "CompanyXLTD",
     "TransactionDesc": "Payment of X" 
   }
